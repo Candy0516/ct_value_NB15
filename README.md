@@ -1,0 +1,9 @@
+preprocess_2跑官方切好的訓練測試
+preprocess_4dataset_noleakage跑四個資料集自己切
+預處理後跑run_fix再跑ct_sum_fix是ct結果
+ML是跑機器學習
+ensenble是跑組合ct+機器學習模型
+CTL是越界值分析
+sum_distribution是特徵CT分布
+CT_cross_ori_distribution是CT越界對應原始值分布
+ctsum_fthreshold是CT使用AUROC特徵選擇
