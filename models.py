@@ -55,7 +55,7 @@ def Get_Model(data, model_type):
         n_estimators=150,
         max_depth=10,
         random_state=42, 
-        class_weight='balanced' #peerj
+        #class_weight='balanced' #peerj
     )
     else:
         raise NameError('model_type should be \'ada\', \'sxgb\', \'usxgb\', \'rf\'')

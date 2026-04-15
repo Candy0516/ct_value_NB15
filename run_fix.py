@@ -58,7 +58,7 @@ if __name__=='__main__':
 
 
     # 設定資料根目錄
-    BASE_DIR = r"D:\candy\NB15"
+    BASE_DIR = r"D:\candy\TONIOT"
 
 
     '''

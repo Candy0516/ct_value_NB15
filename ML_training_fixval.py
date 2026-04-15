@@ -12,7 +12,7 @@ MODEL_TYPES = ['ada','sxgb','usxgb','rf']
 #DATA_TYPES = ['ori','ct']
 DATA_TYPES = ['ori']
 
-path_dir = r'D:\candy\NB15'
+path_dir = r'D:\candy\TONIOT'
 all_metrics_list = []
 
 for data_type in DATA_TYPES:
@@ -55,7 +55,8 @@ for data_type in DATA_TYPES:
 
         # 設置結果保存的資料夾
         #result_dir = os.path.join('result', label, model_type + '_peerj', data_type, sample_type)
-        result_dir = os.path.join('result_split_4dataset', model_type, data_type, 'CTAUROC90up')
+        #result_dir = os.path.join('result', model_type, data_type, 'CTAUROC90up')
+        result_dir = os.path.join('result', model_type, data_type)
         os.makedirs(result_dir, exist_ok=True)
         
         # 讀取資料
@@ -65,31 +66,31 @@ for data_type in DATA_TYPES:
         val = pd.read_csv(os.path.join(val_dir, val_name))
 
         #丟特徵--------------------------------
-        # drop_columns = []
+        drop_columns = []
 
-        # # 建立 X/y 並丟棄 drop_columns
-        # X_train = train.drop(columns=['label'] + drop_columns, errors='ignore')
-        # y_train = train['label']
+        # 建立 X/y 並丟棄 drop_columns
+        X_train = train.drop(columns=['label'] + drop_columns, errors='ignore')
+        y_train = train['label']
 
-        # X_test = test.drop(columns=['label'] + drop_columns, errors='ignore')
-        # y_test = test['label']
+        X_test = test.drop(columns=['label'] + drop_columns, errors='ignore')
+        y_test = test['label']
 
-        # X_val = val.drop(columns=['label'] + drop_columns, errors='ignore')
-        # y_val = val['label']
+        X_val = val.drop(columns=['label'] + drop_columns, errors='ignore')
+        y_val = val['label']
 
         #-------------------------------
         # 要保留的特徵
-        keep_columns = ['dur', 'sbytes', 'dbytes', 'sttl', 'dttl', 'sload', 'Dpkts', 'smeansz', 'dmeansz', 'dintpkt', 'ct_state_ttl']
+        # keep_columns = ['dur', 'sbytes', 'dbytes', 'sttl', 'dttl', 'sload', 'Dpkts', 'smeansz', 'dmeansz', 'dintpkt', 'ct_state_ttl']
 
-        # 建立 X / y
-        X_train = train[keep_columns]
-        y_train = train['label']
+        # # 建立 X / y
+        # X_train = train[keep_columns]
+        # y_train = train['label']
 
-        X_test = test[keep_columns]
-        y_test = test['label']
+        # X_test = test[keep_columns]
+        # y_test = test['label']
 
-        X_val = val[keep_columns]
-        y_val = val['label']
+        # X_val = val[keep_columns]
+        # y_val = val['label']
 
         
         print('    Training model')

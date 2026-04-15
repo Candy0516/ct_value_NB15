@@ -12,7 +12,7 @@ from sklearn.metrics import (
 
 model_type = 'ctsum'
 data_type = 'ct'
-path_dir = r'D:\candy\TONIOT'
+path_dir = r'D:\candy\NB15'
 all_metrics_list = []
 
 # for label in LABELS:
@@ -21,16 +21,13 @@ all_metrics_list = []
 #     label_adj_mean = []
 #     for sample_type in SAMPLE_TYPES:
 #         print(f'Sample Type: {sample_type}')
-result_dir = os.path.join(path_dir, 'result_dash_ct0', model_type, data_type)
+result_dir = os.path.join(path_dir, 'result_split_4dataset', model_type, data_type)
 os.makedirs(result_dir, exist_ok=True)
 
 # === 資料讀取 ===
-# test = pd.read_csv(os.path.join(path_dir, 'data', '7_sum_test', 'benign_test.csv'))
-# train = pd.read_csv(os.path.join(path_dir, 'data', '4_sum', 'ct-value', 'train.csv'))
-# val = pd.read_csv(os.path.join(path_dir, 'data', '7_sum_val', 'benign_val.csv'))
-test = pd.read_csv(os.path.join(path_dir, 'data', '8_dash_ct_0', 'test.csv'))
-train = pd.read_csv(os.path.join(path_dir, 'data', '8_dash_ct_0', 'train.csv'))
-val = pd.read_csv(os.path.join(path_dir, 'data', '8_dash_ct_0', 'val.csv'))
+test = pd.read_csv(os.path.join(path_dir, 'data', '7_sum_test', 'benign_test.csv'))
+train = pd.read_csv(os.path.join(path_dir, 'data', '4_sum', 'ct-value', 'train.csv'))
+val = pd.read_csv(os.path.join(path_dir, 'data', '7_sum_val', 'benign_val.csv'))
 
 # === 驗證集找最佳 threshold ===
 y_val = val['label']
@@ -84,7 +81,6 @@ with open(os.path.join(result_dir, 'results.txt'), 'w') as f:
     f.write(f'NPV: {npv0:.4f}\n')
     f.write(f'AUROC: {auroc0:.4f}\n')
     f.write(f'AUPRC: {auprc0:.4f}\n')
-    f.write(f'threshold_val: {best_threshold_val:.4f}\n')
     f.write(f'best_threshold: {best_threshold:.4f}\n')
     f.write(f'best_tpr: {best_tpr:.4f}\n')
     f.write(f'best_tnr: {best_tnr:.4f}\n')
@@ -114,8 +110,7 @@ metrics_dict = {
     #'Label': label,
     'model_type': model_type,
     #'sample_type': sample_type,
-    'Original Accuracy': acc0 * 100,
-    'Adjusted Accuracy': acc1 * 100,
+    'Accuracy': acc1 * 100,
     'AUROC': auroc0 * 100,
     'AUPRC': auprc0 * 100,
     'Original TPR': tpr0 * 100,
@@ -161,5 +156,57 @@ plt.close()
 
 # === 儲存總表 ===
 all_metrics_df = pd.DataFrame(all_metrics_list)
-all_metrics_df.to_csv('all_metrics_summary_ctcw.csv', index=False)
+all_metrics_df.to_csv('all_metrics_summary_ctcw_split_4dataset_nonan.csv', index=False)
 print("✅ 統整與圖表已完成！")
+
+#每個特徵的最佳域值
+feature_thresholds = {}
+feature_metrics = []
+
+feature_cols = [c for c in train.columns if c not in ['label']]
+
+for feature in feature_cols:
+
+    print(f'Processing feature: {feature}')
+
+    # ===== validation 找最佳 threshold =====
+    y_val = val['label']
+    y_val_score = -val[feature]
+
+    fpr, tpr, thresholds = roc_curve(y_val, y_val_score)
+    youden_index = tpr - fpr
+    best_idx = youden_index.argmax()
+    best_threshold = thresholds[best_idx]
+
+    feature_thresholds[feature] = best_threshold
+
+    # ===== test prediction =====
+    y_test = test['label']
+    y_test_score = -test[feature]
+
+    y_pred = (y_test_score >= best_threshold).astype(int)
+
+    acc, auroc, auprc, tpr1, tnr1, ppv, npv, cm = get_metrics(
+        y_test,
+        y_pred,
+        y_test_score
+    )
+
+    feature_metrics.append({
+        'feature': feature,
+        'threshold': best_threshold,
+        'Accuracy': acc,
+        'AUROC': auroc,
+        'AUPRC': auprc,
+        'TPR': tpr1,
+        'TNR': tnr1,
+        'PPV': ppv,
+        'NPV': npv
+    })
+
+feature_metrics_df = pd.DataFrame(feature_metrics)
+
+feature_metrics_df.to_csv(
+    os.path.join(result_dir, 'feature_threshold_metrics.csv'),
+    index=False
+)
