@@ -1,6 +1,6 @@
 import os, sys, time
 import configparser
-from ct_value.f2_score import score
+from ct_value.f2_score_under import score
 from ct_value.f3_putback import putback
 from ct_value.f4_sum import sum
 from ct_value.f5_sample import sample
@@ -58,7 +58,7 @@ if __name__=='__main__':
 
 
     # 設定資料根目錄
-    BASE_DIR = r"D:\candy\TONIOT"
+    BASE_DIR = r"D:\candy\NB15"
 
 
     '''
