@@ -78,9 +78,9 @@ def count_model_selections(y_true, *model_preds):
 #     print(f'label: {label}\n')
 
 # 載入資料
-train = pd.read_csv(f"D:/candy/TONIOT/data/1_preprocess/train.csv")
-val = pd.read_csv(f"D:/candy/TONIOT/data/1_preprocess/val.csv")
-test = pd.read_csv(f"D:/candy/TONIOT/data/1_preprocess/test.csv")
+train = pd.read_csv(f"D:/candy/NB15/data/1_preprocess/train.csv")
+val = pd.read_csv(f"D:/candy/NB15/data/1_preprocess/val.csv")
+test = pd.read_csv(f"D:/candy/NB15/data/1_preprocess/test.csv")
 
 X_train = train.drop(columns=['label'])
 y_train = train['label']
@@ -107,10 +107,8 @@ thresholds = {
 }
 
 # 產生 CT 分數
-# ct_score = -pd.read_csv(f"D:/candy/TONIOT/data/7_sum_test/benign_test.csv")['sum'].values.reshape(-1, 1)
-# ct_val_score = -pd.read_csv(f"D:/candy/TONIOT/data/7_sum_val/benign_val.csv")['sum'].values.reshape(-1, 1)
-ct_score = -pd.read_csv(f"D:/candy/TONIOT/data/8_dash_ct_0/test.csv")['sum'].values.reshape(-1, 1)
-ct_val_score = -pd.read_csv(f"D:/candy/TONIOT/data/8_dash_ct_0/val.csv")['sum'].values.reshape(-1, 1)
+ct_score = -pd.read_csv(f"D:/candy/TONIOT/data/7_sum_test/benign_test.csv")['sum'].values.reshape(-1, 1)
+ct_val_score = -pd.read_csv(f"D:/candy/TONIOT/data/7_sum_val/benign_val.csv")['sum'].values.reshape(-1, 1)
 
 # 計算 CT 閾值
 ct_thresh = find_best_threshold(y_val, ct_val_score.flatten())
