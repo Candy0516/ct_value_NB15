@@ -16,4 +16,4 @@ CT_cross_ori_distribution是CT越界對應原始值分布
 
 ctsum_fthreshold是CT使用AUROC特徵選擇
 
-all_version_time_ct_ft.py是新板CT值增量+特徵選擇程式，預設FEATURE_AUROC_THRESHOLD = 0.8是選取驗證集AUROC>0.8的特徵
+ct_add_version-master_new2資料夾中的all_version_time_ct_ft.py是新板CT值增量+特徵選擇程式，預設FEATURE_AUROC_THRESHOLD = 0.8是選取驗證集AUROC>0.8的特徵
