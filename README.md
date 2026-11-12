@@ -1,9 +1,13 @@
-preprocess_2跑官方切好的訓練測試
-
+preprocess_2跑NB15官方切好的訓練測試
+preprocess_val.py預處理有切驗證集
+incremental_tasks.py增量預處理
 preprocess_4dataset_noleakage跑四個資料集自己切
 
 預處理後跑run_fix再跑ct_sum_fix是ct結果
+ct_sum_fix.py是最終分類
+ct_sum_fix_threshold.py是最終有加調特徵閾值的最終分類
 
+------------------------------------------------------------------------------------
 ML是跑機器學習
 
 ensenble是跑組合ct+機器學習模型
